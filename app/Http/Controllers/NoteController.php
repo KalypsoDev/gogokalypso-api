@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Note;
+use App\Http\Requests\NoteRequest;
 
 class NoteController extends Controller
 {
@@ -18,19 +19,15 @@ class NoteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NoteRequest $request)
     {
-        //
+        Note::create($request->all());
+        return response()->json([
+            'success' => true
+        ], 201);
     }
 
     /**
