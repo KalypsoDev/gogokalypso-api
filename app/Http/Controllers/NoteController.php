@@ -3,63 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Note;
+use App\Http\Requests\NoteRequest;
+use Illuminate\Http\JsonResponse;
 
 class NoteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return response()->json(Note::all(), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(NoteRequest $request): JsonResponse
     {
-        //
+        $note = Note::create($request->all());
+        return response()->json([
+            'success' => true,
+            'data' => $note
+        ], 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show($id): JsonResponse
     {
-        //
+        $note = Note::find($id);
+        return response()->json($note, 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(NoteRequest $request, $id): JsonResponse
     {
-        //
+        $note = Note::find($id);
+        $note->title = $request->title;
+        $note->content = $request->content;
+        $note->save();
+
+        return response()->json([
+            'success' => true,
+            'data' => $note
+        ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        Note::find($id)->delete();
+        return response()->json([
+            'success' => true
+        ], 200);
     }
 }
