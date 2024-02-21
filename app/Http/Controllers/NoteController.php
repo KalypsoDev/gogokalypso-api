@@ -3,26 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Note;
 use App\Http\Requests\NoteRequest;
+use Illuminate\Http\JsonResponse;
 
 class NoteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        $notes = Note::all();
-        return response()->json($notes, 200);
+        return response()->json(Note::all(), 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @return \Illuminate\Http\Response
-     */
-    public function store(NoteRequest $request)
+    public function store(NoteRequest $request): JsonResponse
     {
         Note::create($request->all());
         return response()->json([
@@ -30,19 +22,13 @@ class NoteController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $note = Note::find($id);
         return response()->json($note, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(NoteRequest $request, $id)
+    public function update(NoteRequest $request, $id): JsonResponse
     {
         $note = Note::find($id);
         $note->title = $request->title;
@@ -54,10 +40,7 @@ class NoteController extends Controller
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         Note::find($id)->delete();
         return response()->json([
