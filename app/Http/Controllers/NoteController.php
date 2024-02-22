@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Note;
 use App\Http\Requests\NoteRequest;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\NoteResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class NoteController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): JsonResource
     {
-        return response()->json(Note::all(), 200);
+        // return response()->json(Note::all(), 200);
+        return NoteResource::collection(Note::all());
     }
 
     public function store(NoteRequest $request): JsonResponse
@@ -19,14 +22,15 @@ class NoteController extends Controller
         $note = Note::create($request->all());
         return response()->json([
             'success' => true,
-            'data' => $note
+            'data' => new NoteResource($note)
         ], 201);
     }
 
-    public function show($id): JsonResponse
+    public function show($id): JsonResource
     {
         $note = Note::find($id);
-        return response()->json($note, 200);
+        // return response()->json($note, 200);
+        return new NoteResource($note);
     }
 
     public function update(NoteRequest $request, $id): JsonResponse
@@ -38,7 +42,7 @@ class NoteController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $note
+            'data' => new NoteResource($note)
         ], 200);
     }
 
